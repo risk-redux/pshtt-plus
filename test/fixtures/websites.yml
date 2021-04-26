@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  protocol: MyText
+  is_www: false
+  domain_id: 1
+  digest: MyText
+  notes: MyText
+
+two:
+  protocol: MyText
+  is_www: false
+  domain_id: 1
+  digest: MyText
+  notes: MyText

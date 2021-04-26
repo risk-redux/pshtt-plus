@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  domain_name: MyText
+  url: MyText
+  a_record: MyText
+  aaaa_record: MyText
+  cname_record: MyText
+  http_status_code: MyText
+  redirect_url: MyText
+  digest: 
+  notes: MyText
+
+two:
+  domain_name: MyText
+  url: MyText
+  a_record: MyText
+  aaaa_record: MyText
+  cname_record: MyText
+  http_status_code: MyText
+  redirect_url: MyText
+  digest: 
+  notes: MyText
