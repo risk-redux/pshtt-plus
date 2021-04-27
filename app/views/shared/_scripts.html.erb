@@ -1,1 +1,13 @@
 <!-- Global site tag (gtag.js) - Google Analytics -->
+
+<!-- For clickable tables -->
+<script>
+$(document).ready(function() {
+  $('tr[data-link]').click(function() {
+    const href = $(this).attr('data-link');
+    if (href) {
+      window.location = href;
+    }
+  });
+});
+</script>

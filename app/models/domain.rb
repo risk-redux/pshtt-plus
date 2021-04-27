@@ -14,10 +14,10 @@ class Domain < ApplicationRecord
       self.save
 
       # The 4 "Endpoints"
-      self.websites.create(protocol: "http", is_www: false)
-      self.websites.create(protocol: "http", is_www: true)
-      self.websites.create(protocol: "https", is_www: false)
-      self.websites.create(protocol: "https", is_www: true)
+      self.websites.create(is_https: false, is_www: false)
+      self.websites.create(is_https: false, is_www: true)
+      self.websites.create(is_https: true, is_www: false)
+      self.websites.create(is_https: true, is_www: true)
     rescue => exception
       puts "[#{current_time_from_proper_timezone}] Exception: #{exception}"
     end
@@ -65,13 +65,31 @@ class Domain < ApplicationRecord
 
       unless @a_record.nil? && @aaaa_record.nil? && @cname_record.nil?
         self.last_live_at = current_time_from_proper_timezone
+        self.is_live = true
       else
         self.notes.push("[#{current_time_from_proper_timezone}] Domain died!")
+        self.is_live = false
       end
 
       self.save
     rescue => exception
       puts "[#{current_time_from_proper_timezone}, #{self.domain_name}] exception: #{exception}"
     end
+  end
+
+  def base_domain
+    domain_pattern = /(.*\.)*(.*\.gov)/
+    
+    return self.domain_name.match(domain_pattern)[2]
+  end
+
+  def decommission_score
+    return rand(11)
+  end
+
+  def pshtt_status
+  end
+
+  def trusty_mail_status
   end
 end

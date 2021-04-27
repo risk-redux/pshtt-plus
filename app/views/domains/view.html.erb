@@ -1,2 +1,5 @@
-<h1>Domains#view</h1>
-<p>Find me in app/views/domains/view.html.erb</p>
+<%- view_title "Domain | @domain.domain_name" %>
+
+<% content_for :main do %>
+  <h1><%= @domain.domain_name %> <small class="text-muted"><%= @domain.checked_at %></small></h1>
+<% end %>

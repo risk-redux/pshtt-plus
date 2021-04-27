@@ -1,2 +1,38 @@
-<h1>Domains#index</h1>
-<p>Find me in app/views/domains/index.html.erb</p>
+<%- view_title "Domains" %>
+
+<% content_for :main do %>
+  <h1>Domains <small class="text-muted"><%= @domains.count %></small></h1>
+
+  <div class='table-responsive'>
+    <table id="domain_table" class="table table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Domain name</th>
+          <th>Base domain</th>
+          <th>Is live?</th>
+          <th>Checked at</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @domains.each do |domain| %>
+        <tr data-link="<%= domain_path(domain.id) %>">
+          <td>
+            <%= link_to domain_path(domain.id) do %>
+              <%= domain.domain_name %>
+            <% end %>
+          </td>
+          <td><%= domain.base_domain %></td>
+          <td><%= domain.is_live %></td>
+          <td><%= domain.checked_at.strftime("%F") %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    $(document).ready( function () {
+      $('#domain_table').DataTable();
+    } );
+  </script>
+<% end %>

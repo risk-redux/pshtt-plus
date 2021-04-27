@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(version: 2021_04_22_155320) do
     
     t.datetime "checked_at", precision: 6 
     t.datetime "last_live_at", precision: 6
+    t.boolean "is_live"
 
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -29,7 +30,8 @@ ActiveRecord::Schema.define(version: 2021_04_22_155320) do
 
   create_table "websites", force: :cascade do |t|
     t.belongs_to :domain, foriegn_key: true
-    t.text "protocol"
+    
+    t.boolean "is_https"
     t.boolean "is_www"
     t.text "digest"
     t.text "notes"
@@ -37,11 +39,11 @@ ActiveRecord::Schema.define(version: 2021_04_22_155320) do
     t.text "http_status"
     t.boolean "is_hsts"
     t.integer "hsts_max_age"
-    t.text "passes_pshtt"
     t.text "redirect_url"
 
     t.datetime "checked_at", precision: 6
     t.datetime "last_live_at", precision: 6
+    t.boolean "is_live"
 
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

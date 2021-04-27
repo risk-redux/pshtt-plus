@@ -55,6 +55,10 @@ class Website < ApplicationRecord
 
       unless @http_status_code.nil?
         self.last_live_at = current_time_from_proper_timezone
+        self.is_live = true
+      else
+        self.notes.push("[#{current_time_from_proper_timezone}] Website died!")
+        self.is_live = false
       end
 
       unless @notes.nil?
@@ -68,11 +72,10 @@ class Website < ApplicationRecord
   end
 
   def to_url
-    url = "#{self.protocol}://"
-    
-    if self.is_www
-      url += "www."
-    end
+    url = ""
+
+    url += self.is_https ? "https://" : "http://"
+    url += self.is_www ? "www." : ""
     
     url += self.domain.domain_name
 
