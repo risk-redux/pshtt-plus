@@ -68,6 +68,7 @@ gem 'digest'
 gem 'resolv'
 gem 'net-http'
 gem 'concurrent-ruby'
+gem 'openssl'
 
 # For background job management
 gem 'sidekiq'
