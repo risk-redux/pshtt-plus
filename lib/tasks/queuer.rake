@@ -4,7 +4,7 @@ task :queuer => :environment do
 
     randoms = Set.new
 
-    # Seed with anything that hasn't been seen, and then with stuff that hasn't been checked in a while.
+    # Seed with anything that hasn't been seen.
     randoms.merge(Domain.select(:id).where(checked_at: nil).map{ |domain| domain.id })
 
     while randoms.length < 1000 do
