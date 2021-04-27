@@ -26,7 +26,7 @@ class Website < ApplicationRecord
     begin
       uri = URI(self.to_url)
 
-      Net::HTTP.start(uri.host, uri.port, { read_timeout: 5, open_timeout: 5 }) do |http|
+      Net::HTTP.start(uri.host, uri.port, { read_timeout: 5, open_timeout: 5, use_ssl: self.is_https }) do |http|
         response = http.get(uri)
 
         @http_status_code = response.code
@@ -48,17 +48,19 @@ class Website < ApplicationRecord
       self.hsts_max_age = parse_hsts(@hsts)
       self.checked_at = current_time_from_proper_timezone
 
-      unless self.digest == @digest
-        self.digest = @digest
-        self.notes.push("[#{current_time_from_proper_timezone}] Digest change: #{@digest}")
-      end
-
       unless @http_status_code.nil?
         self.last_live_at = current_time_from_proper_timezone
         self.is_live = true
       else
-        self.notes.push("[#{current_time_from_proper_timezone}] Website died!")
-        self.is_live = false
+        if self.is_live == true
+          self.notes.push("[#{current_time_from_proper_timezone}] Website died!")
+          self.is_live = false
+        end
+      end
+
+      unless self.digest == @digest
+        self.digest = @digest
+        self.notes.push("[#{current_time_from_proper_timezone}] Digest change: #{@digest}")
       end
 
       unless @notes.nil?

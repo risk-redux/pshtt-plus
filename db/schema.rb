@@ -14,7 +14,6 @@ ActiveRecord::Schema.define(version: 2021_04_22_155320) do
 
   create_table "domains", force: :cascade do |t|
     t.text "domain_name"
-    t.text "url"
     t.text "a_record"
     t.text "aaaa_record"
     t.text "cname_record"
@@ -31,8 +30,9 @@ ActiveRecord::Schema.define(version: 2021_04_22_155320) do
   create_table "websites", force: :cascade do |t|
     t.belongs_to :domain, foriegn_key: true
     
-    t.boolean "is_https"
-    t.boolean "is_www"
+    t.boolean "is_https", null: false
+    t.boolean "is_www", null: false
+    
     t.text "digest"
     t.text "notes"
     t.integer "http_status_code"

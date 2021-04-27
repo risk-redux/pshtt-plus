@@ -1,0 +1,9 @@
+<h3>Plain</h3>
+
+<h4><%= websites.where(is_https: false, is_www: false).first.to_url %></h4>
+<h4><%= websites.where(is_https: true, is_www: false).first.to_url %></h4>
+
+<h3>Web subdomain <small class="text-muted">"www"</small></h3>
+
+<h4><%= websites.where(is_https: false, is_www: true).first.to_url %></h4>
+<h4><%= websites.where(is_https: true, is_www: true).first.to_url %></h4>

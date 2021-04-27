@@ -1,5 +1,18 @@
-<%- view_title "Domain | @domain.domain_name" %>
+<%- view_title "Domain | #{@domain.domain_name}" %>
 
 <% content_for :main do %>
   <h1><%= @domain.domain_name %> <small class="text-muted"><%= @domain.checked_at %></small></h1>
+
+  <h2>DNS information <small class="text-muted">Public</small></h2>
+  <%= dns_form(@domain) %>
+
+  <h2>Websites</h2>
+  <%= websites_section(@domain) %>
+
+  <h2>Meta data</h2>
+  <%= meta_data_form(@domain) %>
+
+  <h3>Notes</h3>
+  <%= notes_list(@domain) %>
+
 <% end %>
