@@ -84,6 +84,40 @@ class Website < ApplicationRecord
     return url
   end
 
+  def is_behaving?
+    if self.is_https
+      return self.is_https_behaving?
+    else
+      return self.is_http_behaving?
+    end
+  end
+
+  def is_https_behaving?
+    
+  end
+
+  def is_http_behaving?
+    if self.http_status_code < 400 && self.http_status_code >= 300
+      if self.is_www
+        if self.redirect_url[0].match("https://www." + self.domain.domain_name).nil?
+          return { behaving: false, message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
+        else
+          return { behaving: true, message: "Website behaves as expected!" }
+        end
+      else
+        if self.redirect_url[0].match("https://" + self.domain.domain_name).nil?
+          return { behaving: false, message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
+        else
+          return { behaving: true, message: "Website behaves as expected!" }
+        end
+      end
+    else
+      return { behaving: false, message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
+    end
+  end
+
+  private
+
   def parse_hsts(hsts)
     unless hsts.nil?
       parse = hsts[0].match(/max-age=([0-9]*)/)
