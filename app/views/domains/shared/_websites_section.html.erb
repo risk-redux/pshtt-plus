@@ -1,6 +1,13 @@
-<% websites.where(is_live: true).each do |website| %>
+<% unless live_websites.nil? || live_websites.empty? %>
+<% live_websites.each do |website| %>
 
 <h4><%= website.to_url %></h4>
 <%= website_report_card(website) %>
 
+<% end %>
+<% else %>
+<div class="alert alert-info" role="alert">
+  <i class="fas <%= report_card_icon("info") %>"></i>
+  <strong>Info</strong>: No live websites found for this domain.
+</div>
 <% end %>

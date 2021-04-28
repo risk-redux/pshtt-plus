@@ -3,19 +3,37 @@
     <div class="row mb-3">
       <label class="col-sm-2 col-form-label">CNAME Record</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control-plaintext" value="<%= domain.cname_record %>">
+        <% unless domain.cname_record.nil? %>
+        <ul>
+          <% domain.cname_record.each do |record| %>
+          <li><%= record %></li>
+          <% end %>
+        </ul>
+        <% end %>
       </div>
     </div>
     <div class="row mb-3">
       <label class="col-sm-2 col-form-label">A Record</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control-plaintext" value="<%= domain.a_record %>">
+        <% unless domain.a_record.nil? %>
+        <ul>
+          <% domain.a_record.each do |record| %>
+          <li><%= record %></li>
+          <% end %>
+        </ul>
+        <% end %>
       </div>
     </div>
     <div class="row mb-3">
       <label class="col-sm-2 col-form-label">AAAA Record</label>
       <div class="col-sm-10">
-        <input type="text" class="form-control-plaintext" value="<%= domain.aaaa_record %>">
+        <% unless domain.aaaa_record.nil? %>
+        <ul>
+          <% domain.aaaa_record.each do |record| %>
+          <li><%= record %></li>
+          <% end %>
+        </ul>
+        <% end %>
       </div>
     </div>
   </fieldset>

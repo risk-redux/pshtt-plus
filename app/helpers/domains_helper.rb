@@ -5,8 +5,9 @@ module DomainsHelper
 
   def websites_section(domain)
     websites = domain.websites
+    live_websites = websites.where(is_live: true)
 
-    render("domains/shared/websites_section", domain:domain, websites: websites)
+    render("domains/shared/websites_section", domain:domain, live_websites: live_websites)
   end
 
   def meta_data_form(domain)

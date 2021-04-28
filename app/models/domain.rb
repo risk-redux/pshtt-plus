@@ -44,9 +44,10 @@ class Domain < ApplicationRecord
     begin
       Resolv::DNS.open() do |query|
         query.timeouts = 1 # Quick resolution or bust!
-        @a_record = query.getresources(self.domain_name, Resolv::DNS::Resource::IN::A).map { |r| r.address.to_s }
-        @aaaa_record = query.getresources(self.domain_name, Resolv::DNS::Resource::IN::AAAA).map { |r| r.address.to_s }
-        @cname_record = query.getresources(self.domain_name, Resolv::DNS::Resource::IN::CNAME).map { |r| r.name.to_s }
+        
+        @a_record = parse_a_record(query)
+        @aaaa_record = parse_aaaa_record(query)
+        @cname_record = parse_cname_record(query)
       end
     rescue => exception
       @notes = "[#{current_time_from_proper_timezone}, #{self.domain_name}] exception: #{exception}"
@@ -91,5 +92,63 @@ class Domain < ApplicationRecord
   end
 
   def trusty_mail_status
+  end
+
+  private
+
+  def parse_a_record(query)
+    records = Set.new
+
+    tld = query.getresources(self.domain_name, Resolv::DNS::Resource::IN::A).map { |r| r.address.to_s }
+    www = query.getresources("www." + self.domain_name, Resolv::DNS::Resource::IN::A).map { |r| r.address.to_s }
+
+    tld.each do |record|
+      records << record
+    end
+
+    www.each do |record|
+      records << record + " [www]"
+    end
+
+    return records
+  end
+
+  def parse_aaaa_record(query)
+    records = Set.new
+
+    begin
+      tld = query.getresources(self.domain_name, Resolv::DNS::Resource::IN::AAAA).map { |r| r.address.to_s }
+      www = query.getresources("www." + self.domain_name, Resolv::DNS::Resource::IN::AAAA).map { |r| r.address.to_s }
+    rescue => exception
+      @notes = "[#{current_time_from_proper_timezone}, #{self.domain_name}] exception: #{exception}"
+      puts @notes
+    end
+
+    tld.each do |record|
+      records << record
+    end
+
+    www.each do |record|
+      records << record + " [www]"
+    end
+
+    return records
+  end
+
+  def parse_cname_record(query)
+    records = Set.new
+
+    tld = query.getresources(self.domain_name, Resolv::DNS::Resource::IN::CNAME).map { |r| r.name.to_s }
+    www = query.getresources("www." + self.domain_name, Resolv::DNS::Resource::IN::CNAME).map { |r| r.name.to_s }
+
+    tld.each do |record|
+      records << record
+    end
+
+    www.each do |record|
+      records << record + "[www]"
+    end
+
+    return records
   end
 end

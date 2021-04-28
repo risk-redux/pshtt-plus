@@ -2,7 +2,6 @@ class Website < ApplicationRecord
   belongs_to :domain
   after_create :bootstrap
 
-  serialize :redirect_url
   serialize :notes
 
   def bootstrap
@@ -48,7 +47,7 @@ class Website < ApplicationRecord
     begin
       self.http_status_code = @http_status_code
       self.http_status = @http_status
-      self.redirect_url = @redirect_url
+      self.redirect_url = parse_redirect_url(@redirect_url)
       self.is_hsts = ! @hsts.nil?
       self.hsts_max_age = parse_hsts(@hsts)
       self.checked_at = current_time_from_proper_timezone
@@ -161,6 +160,14 @@ class Website < ApplicationRecord
       else
         return nil
       end
+    else
+      return nil
+    end
+  end
+
+  def parse_redirect_url(redirect_url)
+    unless redirect_url.nil? || redirect_url.empty?
+      return redirect_url[0]
     else
       return nil
     end
