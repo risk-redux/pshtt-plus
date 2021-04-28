@@ -1,6 +1,6 @@
 module DomainsHelper
-  def notes_list(domain)
-    render("domains/shared/notes_list", domain: domain)
+  def notes_list(notes, limit = nil)
+    render("domains/shared/notes_list", notes: notes, limit: limit)
   end
 
   def websites_section(domain)
@@ -22,6 +22,21 @@ module DomainsHelper
       render("domains/shared/https_website_report_card", website: website, report_card: website.is_behaving?)
     else
       render("domains/shared/http_website_report_card", website: website, report_card: website.is_behaving?)
+    end
+  end
+
+  def report_card_icon(behaving)
+    case behaving
+    when "success"
+      return "fa-check-circle"
+    when "warning"
+      return "fa-times-circle"
+    when "danger"
+      return "fa-exclamation-circle"
+    when "info"
+      return "fa-info-circle"
+    else
+      return "fa-coffee"
     end
   end
 end

@@ -1,21 +1,33 @@
 <form>
-  <fieldset disabled>
+  <fieldset>
     <div class="row mb-3">
-      <label for="disabledTextInput" class="col-sm-2 col-form-label">Created at</label>
+      <label class="col-sm-2 col-form-label">Created at</label>
       <div class="col-sm-10">
         <input type="text" class="form-control-plaintext" value="<%= domain.created_at %>">
       </div>
     </div>
     <div class="row mb-3">
-      <label for="disabledTextInput" class="col-sm-2 col-form-label">Checked at</label>
+      <label class="col-sm-2 col-form-label">Checked at</label>
       <div class="col-sm-10">
         <input type="text" class="form-control-plaintext" value="<%= domain.checked_at %>">
       </div>
     </div>
     <div class="row mb-3">
-      <label for="disabledTextInput" class="col-sm-2 col-form-label">Updated at</label>
+      <label class="col-sm-2 col-form-label">Last live at</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control-plaintext" value="<%= domain.last_live_at %>">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label">Updated at</label>
       <div class="col-sm-10">
         <input type="text" class="form-control-plaintext" value="<%= domain.updated_at %>">
+      </div>
+    </div>
+    <div class="row mb-3">
+      <label class="col-sm-2 col-form-label">Notes</label>
+      <div class="col-sm-10">
+        <%= notes_list(domain.notes) %>
       </div>
     </div>
   </fieldset>

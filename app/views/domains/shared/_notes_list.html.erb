@@ -1,5 +1,11 @@
 <ul>
-  <% domain.notes.reverse.each do |note| %>
-  <li><%= note %></li>
+  <% if limit.nil? %>
+    <% notes.reverse.each do |note| %>
+    <li><%= note %></li>
+    <% end %>
+  <% else %>
+    <% notes.reverse[0..limit].each do |note| %>
+      <li><%= note %></li>
+    <% end %>
   <% end %>
 </ul>

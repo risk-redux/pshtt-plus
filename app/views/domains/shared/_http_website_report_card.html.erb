@@ -1,35 +1,31 @@
-<% if report_card[:behaving] %>
-<div class="alert alert-success" role="alert">
-  <i class="fas fa-check-circle"></i> <%= report_card[:message] %>
-</div>
-<% else %>
-<div class="alert alert-warning" role="alert">
-  <i class="fas fa-times-times"></i> <%= report_card[:message] %>
-</div>
+<% report_card.each do |entry| %>
+  <% unless entry.nil? %>
+  <div class="alert alert-<%= entry[:behaving]%>" role="alert">
+    <i class="fas <%= report_card_icon(entry[:behaving]) %>"></i>
+    <strong><%= entry[:behaving].capitalize %></strong>:
+    <%= entry[:message] %>
+  </div>
+  <% end %>
 <% end %>
 
 <form>
-  <fieldset disabled>
+  <fieldset>
     <div class="row mb-3">
-      <label for="disabledTextInput" class="col-sm-2 col-form-label">Status code</label>
+      <label class="col-sm-2 col-form-label">Status code</label>
       <div class="col-sm-10">
         <input type="text" class="form-control-plaintext" value="<%= website.http_status_code %> [<%= website.http_status %>]">
       </div>
     </div>
     <div class="row mb-3">
-      <label for="disabledTextInput" class="col-sm-2 col-form-label">Redirect URL</label>
+      <label class="col-sm-2 col-form-label">Redirect URL</label>
       <div class="col-sm-10">
         <input type="text" class="form-control-plaintext" value="<%= website.redirect_url %>">
       </div>
     </div>
     <div class="row mb-3">
-      <label for="disabledTextInput" class="col-sm-2 col-form-label">Notes</label>
+      <label class="col-sm-2 col-form-label">Notes</label>
       <div class="col-sm-10">
-        <ul>
-          <% website.notes.reverse[0..5].each do |note| %>
-          <li><%= note %></li>
-          <% end %>
-        </ul>
+        <%= notes_list(website.notes, 5) %>
       </div>
     </div>
   </fieldset>

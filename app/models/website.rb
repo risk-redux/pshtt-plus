@@ -22,6 +22,7 @@ class Website < ApplicationRecord
     @redirect_url
     @digest
     @notes
+    @certificate
 
     begin
       uri = URI(self.to_url)
@@ -34,6 +35,10 @@ class Website < ApplicationRecord
         @redirect_url = response.to_hash['location']
         @hsts = response.to_hash['strict-transport-security']
         @digest = Digest::SHA256.hexdigest response.body
+
+        if self.is_https
+          @certificate = http.peer_cert.to_s
+        end
       end
     rescue => exception
       @notes = "[#{current_time_from_proper_timezone}, #{self.to_url}] Exception: #{exception.message}"
@@ -47,6 +52,7 @@ class Website < ApplicationRecord
       self.is_hsts = ! @hsts.nil?
       self.hsts_max_age = parse_hsts(@hsts)
       self.checked_at = current_time_from_proper_timezone
+      self.certificate = @certificate
 
       unless @http_status_code.nil?
         self.last_live_at = current_time_from_proper_timezone
@@ -93,30 +99,59 @@ class Website < ApplicationRecord
   end
 
   def is_https_behaving?
+    report_card = Set.new
     
+    report_card << check_hsts
+    report_card << check_downgrade_redirections
+    puts report_card
+    return report_card
   end
 
   def is_http_behaving?
+    report_card = Set.new
+
     if self.http_status_code < 400 && self.http_status_code >= 300
       if self.is_www
         if self.redirect_url[0].match("https://www." + self.domain.domain_name).nil?
-          return { behaving: false, message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
+          report_card << { behaving: "warning", message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
         else
-          return { behaving: true, message: "Website behaves as expected!" }
+          report_card << { behaving: "success", message: "HTTP website appropriately redirects to an HTTPS location within the same domain!" }
         end
       else
         if self.redirect_url[0].match("https://" + self.domain.domain_name).nil?
-          return { behaving: false, message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
+          report_card << { behaving: "warning", message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
         else
-          return { behaving: true, message: "Website behaves as expected!" }
+          report_card << { behaving: "success", message: "HTTP website appropriately redirects to an HTTPS location within the same domain!" }
         end
       end
     else
-      return { behaving: false, message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
+      report_card << { behaving: "warning", message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
     end
+
+    return report_card
   end
 
   private
+
+  def check_downgrade_redirections
+    unless self.redirect_url.nil?
+      unless self.redirect_url.match("https://").nil?
+        return { behaving: "success", message: "HTTPS website redirects appropriately to other HTTPS locations!"}
+      else
+        return { behaving: "warning", message: "HTTPS websites must not downgrade with redirection to HTTP locations."}
+      end
+    else
+      return { behaving: "info", message: "HTTPS website is a terminal (i.e., does not redirect)."}
+    end
+  end
+
+  def check_hsts
+    if self.is_hsts && (self.hsts_max_age >= 31536000)
+      return { behaving: "success", message: "Strict-Transport-Security is appropriately configured with a max-age of at least 31536000 seconds!"}
+    else
+      return { behaving: "warning", message: "Strict-Transport-Security is not configured with a max-age of at least 31536000 seconds."}
+    end
+  end
 
   def parse_hsts(hsts)
     unless hsts.nil?
