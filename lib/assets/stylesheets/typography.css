@@ -40,6 +40,6 @@ th, td{
   font-family: 'Fira Mono', monospace;
 }
 
-/* tr[data-link]:hover {
+tr[data-link]:hover {
   cursor: pointer;
-} */
+}

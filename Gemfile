@@ -67,8 +67,7 @@ gem 'csv'
 gem 'digest'
 gem 'resolv'
 gem 'net-http'
-gem 'concurrent-ruby'
-gem 'openssl'
+gem 'will_paginate'
 
 # For background job management
 gem 'sidekiq'

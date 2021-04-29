@@ -4,35 +4,53 @@
   <h1>Domains <small class="text-muted"><%= @domains.count %></small></h1>
 
   <div class='table-responsive'>
-    <table id="domain_table" class="table table-hover">
+    <table id="domain_table" class="table table-hover" data-source="<%= domains_url(format: "json") %>">
       <thead class="table-light">
         <tr>
           <th>Domain name</th>
-          <th>Base domain</th>
           <th>Is live?</th>
           <th>Checked at</th>
         </tr>
       </thead>
       <tbody>
-        <% @domains.each do |domain| %>
-        <tr data-link="<%= domain_path(domain.id) %>">
-          <td>
-            <%= link_to domain_path(domain.id) do %>
-              <%= domain.domain_name %>
-            <% end %>
-          </td>
-          <td><%= domain.base_domain %></td>
-          <td><%= domain.is_live %></td>
-          <td><%= domain.checked_at.strftime("%F") %></td>
-        </tr>
-        <% end %>
       </tbody>
     </table>
   </div>
 
-  <script>
-    $(document).ready( function () {
-      $('#domain_table').DataTable();
-    } );
+  <!-- For clickable tables -->
+  <script type="text/javascript">
+    function make_rows_clicky() {
+      $('tbody').on('click', 'tr', function() {
+        href = $(this).attr('data-link');
+        if (href) {
+          window.location = href;
+        }
+      });
+    }
+
+    function inititialize_table() {
+      $(document).ready( function () {
+        $('#domain_table').DataTable({
+          serverSide: true,
+          ajax: {
+            url: $('#domain_table').data('source'),
+            dataSrc: 'tableData'
+          },
+          columns: [
+            { data: "domain_name" },
+            { data: "is_live" },
+            { data: "checked_at" }
+          ],
+          processing: true,
+          searching: true,
+          ordering: false,
+          paging: true,
+          pagingType: "full_numbers"
+        });
+      });
+    }
+
+    inititialize_table();
+    make_rows_clicky();
   </script>
 <% end %>
