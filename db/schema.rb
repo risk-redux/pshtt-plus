@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_22_155320) do
+ActiveRecord::Schema.define(version: 2021_05_03_213403) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "domains", force: :cascade do |t|
     t.text "domain_name"
@@ -18,21 +21,23 @@ ActiveRecord::Schema.define(version: 2021_04_22_155320) do
     t.text "aaaa_record"
     t.text "cname_record"
     t.text "notes"
-    
-    t.datetime "checked_at", precision: 6 
+    t.datetime "checked_at", precision: 6
     t.datetime "last_live_at", precision: 6
     t.boolean "is_live"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
+  create_table "reports", force: :cascade do |t|
+    t.text "content_blob"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "websites", force: :cascade do |t|
-    t.belongs_to :domain, foriegn_key: true
-    
+    t.bigint "domain_id"
     t.boolean "is_https", null: false
     t.boolean "is_www", null: false
-    
     t.text "digest"
     t.text "notes"
     t.integer "http_status_code"
@@ -40,22 +45,19 @@ ActiveRecord::Schema.define(version: 2021_04_22_155320) do
     t.boolean "is_hsts"
     t.integer "hsts_max_age"
     t.text "redirect_url"
-    
     t.text "report_card"
     t.boolean "is_behaving"
-
     t.text "certificate"
     t.datetime "not_before"
     t.datetime "not_after"
     t.text "issuer"
     t.text "subject"
-
     t.datetime "checked_at", precision: 6
     t.datetime "last_live_at", precision: 6
     t.boolean "is_live"
-
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["domain_id"], name: "index_websites_on_domain_id"
   end
 
 end
