@@ -6,6 +6,7 @@ require 'csv'
 require 'digest'
 require 'resolv'
 require 'net/http'
+require 'openssl'
 require './app/datatables/domain_table'
 
 # Require the gems listed in Gemfile, including any gems

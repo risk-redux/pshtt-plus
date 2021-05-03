@@ -40,8 +40,15 @@ ActiveRecord::Schema.define(version: 2021_04_22_155320) do
     t.boolean "is_hsts"
     t.integer "hsts_max_age"
     t.text "redirect_url"
-    t.text "certificate"
     
+    t.text "report_card"
+    t.boolean "is_behaving"
+
+    t.text "certificate"
+    t.datetime "not_before"
+    t.datetime "not_after"
+    t.text "issuer"
+    t.text "subject"
 
     t.datetime "checked_at", precision: 6
     t.datetime "last_live_at", precision: 6

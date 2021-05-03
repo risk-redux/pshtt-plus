@@ -29,6 +29,16 @@
       </div>
     </div>
     <div class="row mb-3">
+      <label class="col-sm-2 col-form-label">X.509 Certificate</label>
+      <div class="col-sm-10">
+        <pre>
+          <code>
+            <%= website.certificate || "N/A" %>
+          </code>
+        </pre>
+      </div>
+    </div>
+    <div class="row mb-3">
       <label class="col-sm-2 col-form-label">Notes</label>
       <div class="col-sm-10">
         <%= notes_list(website.notes, 5) %>

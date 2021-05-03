@@ -20,7 +20,9 @@ class DomainTable
     domains.map do |domain|
       {
         domain_name: link_to(domain.domain_name, domain),
-        is_live: domain.is_live,
+        published: domain.is_live,
+        live_websites: domain.websites.where(is_live: true).count,
+        is_behaving: domain.is_behaving?,
         checked_at: domain.checked_at,
         DT_RowAttr: { "data-link": "/domains/#{domain.id}" }
       }

@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 begin
-  targets = File.open('db/2021-04-dhs-targets.txt').readlines
+  targets = File.open('db/2021-05-consolidated-targets.txt').readlines
 
   # I was originally using the seed routine as a test case for simple threading of the Domain and Website checks. Ultimately, though, I think that work ought to be moved to a queue/worker type concurrency setup as a part of the main deployment rather than part of the database seeding step. I'm keeping the the code, though, as a gist for future reference.
   while ! targets.empty?
@@ -16,7 +16,7 @@ begin
       begin
         puts "Creating Domain: #{target.chomp}"
         threads << Thread.new {
-          domain = Domain.create(domain_name: target.chomp)
+          domain = Domain.find_or_create_by(domain_name: target.chomp)
         }
       rescue => exception
         puts "Exception:", exception

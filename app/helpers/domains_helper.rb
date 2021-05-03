@@ -20,9 +20,9 @@ module DomainsHelper
 
   def website_report_card(website)
     if website.is_https
-      render("domains/shared/https_website_report_card", website: website, report_card: website.is_behaving?)
+      render("domains/shared/https_website_report_card", website: website, report_card: website.report_card)
     else
-      render("domains/shared/http_website_report_card", website: website, report_card: website.is_behaving?)
+      render("domains/shared/http_website_report_card", website: website, report_card: website.report_card)
     end
   end
 

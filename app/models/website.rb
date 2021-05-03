@@ -3,6 +3,7 @@ class Website < ApplicationRecord
   after_create :bootstrap
 
   serialize :notes
+  serialize :report_card
 
   def bootstrap
     begin
@@ -55,10 +56,12 @@ class Website < ApplicationRecord
 
       unless @http_status_code.nil?
         self.last_live_at = current_time_from_proper_timezone
+        self.report_card = grade_website
         self.is_live = true
       else
         if self.is_live == true
           self.notes.push("[#{current_time_from_proper_timezone}] Website died!")
+          self.report_card = nil
           self.is_live = false
         end
       end
@@ -90,34 +93,44 @@ class Website < ApplicationRecord
   end
 
   def is_behaving?
-    if self.is_https
-      return self.is_https_behaving?
+    unless self.report_card.nil?
+      grades = self.report_card.map { |grade| grade[:behaving] }
+      
+      return !(grades.include? "warning")
     else
-      return self.is_http_behaving?
+      return true
     end
   end
 
-  def is_https_behaving?
+  def grade_website
+    if self.is_https
+      return self.grade_https
+    else
+      return self.grade_http
+    end
+  end
+
+  def grade_https
     report_card = Set.new
     
     report_card << check_hsts
     report_card << check_downgrade_redirections
-    puts report_card
+    
     return report_card
   end
 
-  def is_http_behaving?
+  def grade_http
     report_card = Set.new
 
     if self.http_status_code < 400 && self.http_status_code >= 300
       if self.is_www
-        if self.redirect_url[0].match("https://www." + self.domain.domain_name).nil?
+        if self.redirect_url.match("https://www." + self.domain.domain_name).nil?
           report_card << { behaving: "warning", message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
         else
           report_card << { behaving: "success", message: "HTTP website appropriately redirects to an HTTPS location within the same domain!" }
         end
       else
-        if self.redirect_url[0].match("https://" + self.domain.domain_name).nil?
+        if self.redirect_url.match("https://" + self.domain.domain_name).nil?
           report_card << { behaving: "warning", message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
         else
           report_card << { behaving: "success", message: "HTTP website appropriately redirects to an HTTPS location within the same domain!" }

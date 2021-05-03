@@ -8,7 +8,9 @@
       <thead class="table-light">
         <tr>
           <th>Domain name</th>
-          <th>Is live?</th>
+          <th>Published?</th>
+          <th>Live websites?</th>
+          <th>Is behaving?</th>
           <th>Checked at</th>
         </tr>
       </thead>
@@ -38,7 +40,9 @@
           },
           columns: [
             { data: "domain_name" },
-            { data: "is_live" },
+            { data: "published" },
+            { data: "live_websites"},
+            { data: "is_behaving"},
             { data: "checked_at" }
           ],
           processing: true,

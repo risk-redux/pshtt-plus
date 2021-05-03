@@ -94,6 +94,22 @@ class Domain < ApplicationRecord
   def trusty_mail_status
   end
 
+  def is_behaving?
+    grades = []
+    live_websites = self.websites.where(is_live: true)
+
+    unless live_websites.empty?
+      live_websites.each do |website|
+        grades.push website.is_behaving?
+      end
+
+      # If any websites are misbehaving, fail the domain.
+      return !(grades.include? false)
+    else
+      return false
+    end
+  end
+
   private
 
   def parse_a_record(query)

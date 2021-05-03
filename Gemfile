@@ -67,6 +67,7 @@ gem 'csv'
 gem 'digest'
 gem 'resolv'
 gem 'net-http'
+gem 'openssl'
 gem 'will_paginate'
 
 # For background job management
