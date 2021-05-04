@@ -28,5 +28,11 @@ module PshttPlus
     # config.eager_load_paths << Rails.root.join("extras")
     
     config.active_job.queue_adapter = :sidekiq
+
+    # To support CORS for Observable requests.
+    config.action_dispatch.default_headers = {
+      'Access-Control-Allow-Origin' => 'https://observablehq.com',
+      'Access-Control-Request-Method' => "GET"
+    }
   end
 end

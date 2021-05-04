@@ -3,10 +3,7 @@
 <% content_for :main do %>
   <h1>Welcome to <%= "#{Rails.application.config.app_name}" %>!</h1>
 
-  <p class="lead">Currently tracking:
-    <ul>
-      <li><%= @domains.count %> Domains (<%= @domain_coverage * 100 %>%)</li>
-      <li><%= @websites.count %> Websites (<%= @website_coverage * 100 %>%)</li>
-    </ul>
-  </p>
+  <div id="domain_donut">
+    <iframe width="100%" height="584" frameborder="0" src="https://observablehq.com/embed/@egyptiankarim/domain-donut-chart?cells=chart"></iframe>
+  </div>
 <% end %>
