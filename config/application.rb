@@ -31,7 +31,7 @@ module PshttPlus
 
     # To support CORS for Observable requests.
     config.action_dispatch.default_headers = {
-      'Access-Control-Allow-Origin' => 'https://observablehq.com',
+      'Access-Control-Allow-Origin' => 'https://egyptiankarim.static.observableusercontent.com',
       'Access-Control-Request-Method' => "GET"
     }
   end
