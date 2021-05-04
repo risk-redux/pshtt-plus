@@ -14,8 +14,11 @@
             <%= link_to("About", about_path(), { class: "nav-link" }) %>
           </li>
           <div class="dropdown-divider"></div>
-          <li class="nav-item <%= is_active?('static#about')%>">
+          <li class="nav-item <%= is_active?('domains#index')%>">
             <%= link_to("Domains", domains_path(), { class: "nav-link" }) %>
+          </li>
+          <li class="nav-item <%= is_active?('reports#index')%>">
+            <%= link_to("Reports", reports_path(), { class: "nav-link" }) %>
           </li>
         </ul>
       </div>

@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   get "about", to: "static#about", as: :about
 
   get 'reports', to: "reports#index", as: :reports
+  get 'reports/:id', to: "reports#download", as: :report_download
    
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
