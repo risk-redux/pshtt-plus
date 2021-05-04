@@ -64,7 +64,7 @@ class Domain < ApplicationRecord
         self.notes.push(@notes)
       end
 
-      unless @a_record.nil? && @aaaa_record.nil? && @cname_record.nil?
+      unless @a_record.empty? && @aaaa_record.empty? && @cname_record.empty?
         self.last_live_at = current_time_from_proper_timezone
         self.is_live = true
       else
