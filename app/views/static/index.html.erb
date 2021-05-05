@@ -3,7 +3,10 @@
 <% content_for :main do %>
   <h1>Welcome to <%= "#{Rails.application.config.app_name}" %>!</h1>
 
-  <div id="domain_donut">
-    <iframe width="100%" height="584" frameborder="0" src="https://observablehq.com/embed/@egyptiankarim/domain-donut-chart?cells=chart"></iframe>
+  <div class="container">
+    <div class="row">
+      <div id="domain_donut" class="col-md">
+      </div>
+    </div>
   </div>
 <% end %>
