@@ -26,9 +26,9 @@ class StaticController < ApplicationController
     domain_names = Domain.select(:domain_name).map{ |domain| domain.domain_name }
     split_and_reversed_domain_names = domain_names.map{ |domain_name| domain_name.split('.').reverse }
 
-    @data = arrayify(hash_domain_names(split_and_reversed_domain_names))
+    @data = arrayify(hash_domain_names(split_and_reversed_domain_names)["gov"]["nasa"])
     
-    @data = { label: "top", children: @data }
+    @data = { label: "nasa.gov", children: @data }
 
     respond_to do |format|
       format.json { render json: JSON.pretty_generate(@data) }
