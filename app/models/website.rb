@@ -37,7 +37,7 @@ class Website < ApplicationRecord
         @digest = Digest::SHA256.hexdigest response.body
 
         if self.is_https
-          @certificate = http.peer_cert.to_s
+          @certificate = OpenSSL::X509::Certificate.new(http.peer_cert.to_s)
         end
       end
     rescue => exception
@@ -52,7 +52,13 @@ class Website < ApplicationRecord
       self.is_hsts = ! @hsts.nil?
       self.hsts_max_age = parse_hsts(@hsts)
       self.checked_at = current_time_from_proper_timezone
-      self.certificate = @certificate
+      
+      self.certificate = @certificate.to_s
+
+      self.not_before = @certificate.not_before
+      self.not_after = @certificate.not_after
+      self.issuer = @certificate.issuer.to_s
+      self.subject = @certificate.subject.to_s
 
       unless @http_status_code.nil?
         self.last_live_at = current_time_from_proper_timezone
