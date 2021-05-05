@@ -11,6 +11,4 @@ class DomainsController < ApplicationController
   def view
     @domain = Domain.find(params[:id])
   end
-
-  private
 end

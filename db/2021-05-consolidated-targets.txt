@@ -512,7 +512,6 @@ cossc.gsfc.nasa.gov
 costar.jpl.nasa.gov
 costep2.nascom.nasa.gov
 costep5.nascom.nasa.gov
-Courtney Section below
 cove.larc.nasa.gov
 covid19.earthdata.nasa.gov
 cpdashboard.nasa.gov
@@ -552,7 +551,6 @@ daac.gsfc.nasa.gov
 daedalus1-new.larc.nasa.gov
 daedalus1-old.larc.nasa.gov
 daedalus1.larc.nasa.gov
-Dana Section below
 dance.gsfc.nasa.gov
 darktarget.gsfc.nasa.gov
 dart2.arc.nasa.gov
@@ -1797,7 +1795,6 @@ moon.trek.nasa.gov
 moontrek-protected.jpl.nasa.gov
 moontrekbeta-protected.jpl.nasa.gov
 moontrekdev-protected.jpl.nasa.gov
-MORE FROM DHS SCAN - MANY ARE NOT SMD
 morpheuslander.jsc.nasa.gov
 mpai.ksc.nasa.gov
 mplnet.gsfc.nasa.gov
