@@ -15,7 +15,7 @@ class StaticController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.json { render json: JSON.pretty_generate(@data) }
+      format.json { render json: JSON.pretty_generate(@data.as_json) }
     end
   end
 
