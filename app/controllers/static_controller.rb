@@ -28,6 +28,8 @@ class StaticController < ApplicationController
 
     @data = arrayify(hash_domain_names(split_and_reversed_domain_names))
     
+    @data = { label: "top", children: @data }
+
     respond_to do |format|
       format.json { render json: JSON.pretty_generate(@data) }
     end
