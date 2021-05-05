@@ -52,7 +52,7 @@ class StaticController < ApplicationController
       unless hashed_domain_names[key].empty?
         list.push( { label: key, children: arrayify(hashed_domain_names[key]) } )
       else
-        list.push( { label: key, children: [] } )
+        list.push( { label: key, children: [], value: 1 } )
       end
     end
 
