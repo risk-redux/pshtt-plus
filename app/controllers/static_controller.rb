@@ -27,8 +27,9 @@ class StaticController < ApplicationController
     split_and_reversed_domain_names = domain_names.map{ |domain_name| domain_name.split('.').reverse }
 
     @data = arrayify(hash_domain_names(split_and_reversed_domain_names)["gov"]["nasa"])
-    
-    @data = { label: "nasa.gov", children: @data }
+
+    @data = @data.sort_by { |item| item[:children].length }.reverse!
+    @data = { label: "nasa.gov", children: @data[0..25] }
 
     respond_to do |format|
       format.json { render json: JSON.pretty_generate(@data) }
@@ -51,7 +52,7 @@ class StaticController < ApplicationController
       unless hashed_domain_names[key].empty?
         list.push( { label: key, children: arrayify(hashed_domain_names[key]) } )
       else
-        list.push( { label: key, value: 1 } )
+        list.push( { label: key, children: [] } )
       end
     end
 
