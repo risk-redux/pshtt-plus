@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get 'index', to: "static#index", as: :index
 
   get 'domains', to: "domains#index", as: :domains
+  post 'domains', to: "domains#queue", as: :domain_queue
   get 'domains/:id', to: "domains#view", as: :domain
 
   # get 'websites', to: "websites#index", as: :websites

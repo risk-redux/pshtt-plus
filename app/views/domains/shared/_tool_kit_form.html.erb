@@ -1,0 +1,16 @@
+<form action="/domains" accept-charset="UTF-8" method="post">
+  <fieldset>
+    <input name="authenticity_token" value="<%= form_authenticity_token %>" type="hidden">
+    <input id="id" name="id" value="<%= @domain.id %>" type="hidden" >
+    <div class="row mb-3">
+        <div class="col-auto">
+        <% if @domain.checked_at < (DateTime.now - 1.day) %>
+          <button type="submit" class="btn btn-primary mb-3">Queue up!</button>
+        <% else %>
+          <button type="submit" class="btn btn-secondary mb-3" disabled>Queue up!</button>
+        <% end %>
+        </div>
+      </div>
+    </div>
+  </fieldset>
+</form>

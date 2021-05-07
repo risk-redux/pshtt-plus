@@ -26,6 +26,10 @@ module DomainsHelper
     end
   end
 
+  def tool_kit_form(domain)
+    render("domains/shared/tool_kit_form", domain: domain)
+  end
+
   def report_card_icon(behaving)
     case behaving
     when "success"
