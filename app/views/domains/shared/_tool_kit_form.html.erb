@@ -7,7 +7,9 @@
         <% if @domain.checked_at < (DateTime.now - 1.day) %>
           <button type="submit" class="btn btn-primary mb-3">Queue up!</button>
         <% else %>
-          <button type="submit" class="btn btn-secondary mb-3" disabled>Queue up!</button>
+          <span class="d-inline-block" tabindex="0" data-bs-toggle="tooltip" data-bs-placement="right" title="Domains may only be queued up once a day.">
+            <button class="btn btn-secondary mb-3" disabled>Queue up!</button>
+          </span>
         <% end %>
         </div>
       </div>

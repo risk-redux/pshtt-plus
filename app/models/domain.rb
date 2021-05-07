@@ -68,8 +68,10 @@ class Domain < ApplicationRecord
         self.last_live_at = current_time_from_proper_timezone
         self.is_live = true
       else
-        self.notes.push("[#{current_time_from_proper_timezone}] Domain died!")
-        self.is_live = false
+        if self.is_live || self.is_live.nil?
+          self.notes.push("[#{current_time_from_proper_timezone}] Domain died!")
+          self.is_live = false
+        end
       end
 
       self.save

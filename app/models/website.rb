@@ -65,7 +65,7 @@ class Website < ApplicationRecord
         self.report_card = grade_website
         self.is_live = true
       else
-        if self.is_live == true
+        if self.is_live || self.is_live.nil?
           self.notes.push("[#{current_time_from_proper_timezone}] Website died!")
           self.report_card = nil
           self.is_live = false
