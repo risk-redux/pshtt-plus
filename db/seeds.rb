@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 begin
-  targets = File.open('db/2021-05-consolidated-targets.txt').readlines
+  targets = File.open('db/2021-05-10-targets.txt').readlines
 
   # I was originally using the seed routine as a test case for simple threading of the Domain and Website checks. Ultimately, though, I think that work ought to be moved to a queue/worker type concurrency setup as a part of the main deployment rather than part of the database seeding step. I'm keeping the the code, though, as a gist for future reference.
   while ! targets.empty?
