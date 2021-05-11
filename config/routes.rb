@@ -20,5 +20,14 @@ Rails.application.routes.draw do
    
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 
-  mount Sidekiq::Web => "/sidekiq"
+  # Only allow authenticated users to get access to the Sidekiq web interface
+  devise_scope :user do
+    authenticated :user do
+      mount Sidekiq::Web => "/sidekiq"
+    end
+  end
+
+  get "users", to: "users#index", as: :users
+
+  devise_for :users
 end

@@ -13,13 +13,43 @@
           <li class="nav-item <%= is_active?('static#about')%>">
             <%= link_to("About", about_path(), { class: "nav-link" }) %>
           </li>
+
           <div class="dropdown-divider"></div>
+
           <li class="nav-item <%= is_active?('domains#index')%>">
             <%= link_to("Domains", domains_path(), { class: "nav-link" }) %>
           </li>
           <li class="nav-item <%= is_active?('reports#index')%>">
             <%= link_to("Reports", reports_path(), { class: "nav-link" }) %>
           </li>
+
+          <div class="dropdown-divider"></div>
+
+          <li class="nav-item">
+            <% if user_signed_in? %>
+              <%= link_to(destroy_user_session_path(), { class: "nav-link", method: :delete }) do %>
+              Sign out <i class="fas fa-sign-out-alt"></i>
+              <% end %>
+            <% else %>
+              <%= link_to(new_user_session_path(), { class: "nav-link" }) do %>
+              Sign in <i class="fas fa-sign-in-alt"></i>
+              <% end %>
+            <% end %>
+          </li>
+
+          <% if user_signed_in? %>
+          <div class="dropdown-divider"></div>
+          
+          <li class="nav-item">
+            <%= link_to("/sidekiq", { class: "nav-link" }) do %>
+            Sidekiq <i class="fas fa-chart-line"></i> 
+            <% end %>
+          </li>
+          <li class="nav-item">
+            <%= link_to(users_path(), { class: "nav-link" }) do %>
+            Users <i class="fas fa-users"></i>
+            <% end %>
+          <% end %>
         </ul>
       </div>
     </div>

@@ -72,3 +72,6 @@ gem 'will_paginate'
 
 # For background job management
 gem 'sidekiq'
+
+# For authentication/authorization
+gem 'devise'

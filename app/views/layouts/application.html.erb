@@ -6,6 +6,17 @@
     <%= render partial: "shared/nav" %>
 
     <main role="main" class="container">
+      <% unless notice.nil? %>
+      <div class="alert alert-info" role="alert">
+        <i class="fas fa-info-circle""></i> <%= notice %>
+      </div>
+      <% end %>
+      <% unless alert.nil? %>
+      <div class="alert alert-warning" role="alert">
+        <i class="fas fa-times-circle""></i> <%= alert %>
+      </div>
+      <% end %>
+
       <!-- Begin page content -->
       <%= yield :main %>
     </main>

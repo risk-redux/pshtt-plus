@@ -1,0 +1,14 @@
+<% if resource.errors.any? %>
+  <div class="alert alert-danger" role="alert">
+    <h5><i class="fas fa-excalmation-circle""></i> 
+      <%= I18n.t("errors.messages.not_saved", count: resource.errors.count, resource: resource.class.model_name.human.downcase) %>
+    </h5>
+    <p>
+      <ul>
+        <% resource.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </p>
+  </div>
+<% end %>

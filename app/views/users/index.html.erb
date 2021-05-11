@@ -1,0 +1,36 @@
+<%- view_title "Users" %>
+
+<% content_for :main do %>
+  <h1>Users</h1>
+
+    <div class='table-responsive'>
+    <table id="domain_table" class="table table-hover" data-source="<%= domains_url(format: "json") %>">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Email</th>
+          <th>Is approved?</th>
+          <th>Created at</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+        <tr>
+          <td><%= user.id %></td>
+          <td><%= user.email %></td>
+          <td><%= user.approved %></td>
+          <td><%= user.created_at %></td>
+          <td class="text-end">
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <button type="button" class="btn btn-outline-primary"><i class="far fa-thumbs-up"></i></button>
+              <button type="button" class="btn btn-outline-primary"><i class="far fa-thumbs-down"></i></button>
+              <button type="button" class="btn btn-danger"><i class="far fa-times-circle"></i></button>
+            </div>
+          </td>
+        <tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
