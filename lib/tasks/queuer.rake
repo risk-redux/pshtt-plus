@@ -1,17 +1,24 @@
 desc 'Queue up some jobs!'
 task :queuer => :environment do
-    puts "Queuing up some jobs!"
+    targets = Set.new
 
-    randoms = Set.new
+    total = Domain.count
+    portion = 0.25
+    chunk = (total * portion).ceil
+    
+    puts "Queuing up #{chunk} jobs!"
+
+    news = Domain.select(:id).where(checked_at: nil).map{ |domain| domain.id }
+    olds = Domain.select(:id).order(checked_at: "ASC").limit(chunk).map{ |domain| domain.id }
 
     # Seed with anything that hasn't been seen.
-    randoms.merge(Domain.select(:id).where(checked_at: nil).map{ |domain| domain.id })
+    targets.merge(news)
 
-    while randoms.length < 1000 do
-        randoms.add(rand(Domain.count) + 1)
+    if targets.length < chunk
+        targets.merge(olds)
     end
 
-    randoms.each do |random|
-        CheckDomainsJob.perform_later random
+    targets.each do |target|
+        CheckDomainsJob.perform_later target
     end
 end
