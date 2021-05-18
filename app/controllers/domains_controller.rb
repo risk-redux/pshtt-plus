@@ -27,6 +27,7 @@ class DomainsController < ApplicationController
   private
 
   def domain_queue_params
+    # Todo: Strong parameter validation.
     puts "\n\n\n", params, "\n\n\n"
   end
 end

@@ -3,6 +3,10 @@ module DomainsHelper
     render("domains/shared/notes_list", notes: notes, limit: limit)
   end
 
+  def dns_section(domain)
+    render("domains/shared/dns_section", domain: domain)
+  end
+
   def websites_section(domain)
     websites = domain.websites
     live_websites = websites.where(is_live: true)
@@ -14,8 +18,8 @@ module DomainsHelper
     render("domains/shared/meta_data_form", domain: domain)
   end
 
-  def dns_form(domain)
-    render("domains/shared/dns_form", domain: domain)
+  def dns_report_card(domain)
+    render("domains/shared/dns_report_card", domain: domain, report_card: domain.report_card)
   end
 
   def website_report_card(website)

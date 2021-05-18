@@ -7,6 +7,7 @@ class Domain < ApplicationRecord
   serialize :aaaa_record
   serialize :cname_record
   serialize :notes
+  serialize :report_card
 
   def bootstrap
     begin
@@ -50,7 +51,7 @@ class Domain < ApplicationRecord
         @cname_record = parse_cname_record(query)
       end
     rescue => exception
-      @notes = "[#{current_time_from_proper_timezone}, #{self.domain_name}] exception: #{exception}"
+      @notes = "[#{current_time_from_proper_timezone}, #{self.domain_name}] Exception: #{exception}"
       puts @notes
     end
 
@@ -59,7 +60,8 @@ class Domain < ApplicationRecord
       self.aaaa_record = @aaaa_record
       self.cname_record = @cname_record
       self.checked_at = current_time_from_proper_timezone
-      
+      self.report_card = grade_domain
+
       unless @notes.nil?
         self.notes.push(@notes)
       end
@@ -76,7 +78,7 @@ class Domain < ApplicationRecord
 
       self.save
     rescue => exception
-      puts "[#{current_time_from_proper_timezone}, #{self.domain_name}] exception: #{exception}"
+      puts "[#{current_time_from_proper_timezone}, #{self.domain_name}] Exception: #{exception}"
     end
   end
 
@@ -87,13 +89,15 @@ class Domain < ApplicationRecord
   end
 
   def decommission_score
-    return rand(11)
+    # Todo: Some magical calculation, to be sure.
   end
 
   def pshtt_status
+    # Todo: Literally just a flat replica of the pshtt checks.
   end
 
   def trusty_mail_status
+    # Todo: Trusty mail checks.
   end
 
   def is_behaving?
@@ -112,7 +116,32 @@ class Domain < ApplicationRecord
     end
   end
 
+  def grade_domain
+    report_card = Set.new
+
+    report_card << grade_aaaa_record
+    report_card << grade_live_websites
+
+    return report_card
+  end
+
   private
+
+  def grade_live_websites
+    live_websites = self.websites.where(is_live: true)
+
+    if live_websites.empty?
+      return { behaving: "info", message: "No live websites found for this domain." }
+    end
+  end
+
+  def grade_aaaa_record
+    if self.aaaa_record.nil? || self.aaaa_record.empty?
+      return { behaving: "info", message: "Domain does not list a AAAA record (IPv6)." }
+    else
+      return { behaving: "success", message: "Domain lists a AAAA record (IPv6)!" }
+    end
+  end
 
   def parse_a_record(query)
     records = Set.new

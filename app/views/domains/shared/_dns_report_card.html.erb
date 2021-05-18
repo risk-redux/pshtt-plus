@@ -1,3 +1,13 @@
+<% report_card.each do |entry| %>
+  <% unless entry.nil? %>
+  <div class="alert alert-<%= entry[:behaving]%>" role="alert">
+    <i class="fas <%= report_card_icon(entry[:behaving]) %>"></i>
+    <strong><%= entry[:behaving].capitalize %></strong>:
+    <%= entry[:message] %>
+  </div>
+  <% end %>
+<% end %>
+
 <form>
   <fieldset>
     <div class="row mb-3">

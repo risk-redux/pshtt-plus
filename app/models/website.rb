@@ -116,11 +116,13 @@ class Website < ApplicationRecord
     end
   end
 
+  private
+  
   def grade_https
     report_card = Set.new
     
-    report_card << check_hsts
-    report_card << check_downgrade_redirections
+    report_card << grade_hsts
+    report_card << grade_downgrade_redirections
     
     return report_card
   end
@@ -149,9 +151,7 @@ class Website < ApplicationRecord
     return report_card
   end
 
-  private
-
-  def check_downgrade_redirections
+  def grade_downgrade_redirections
     unless self.redirect_url.nil?
       unless self.redirect_url.match("https://").nil?
         return { behaving: "success", message: "HTTPS website redirects appropriately to other HTTPS locations!"}
@@ -163,7 +163,7 @@ class Website < ApplicationRecord
     end
   end
 
-  def check_hsts
+  def grade_hsts
     if self.is_hsts && (self.hsts_max_age >= 31536000)
       return { behaving: "success", message: "Strict-Transport-Security is appropriately configured with a max-age of at least 31536000 seconds!"}
     else
