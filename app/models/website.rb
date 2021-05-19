@@ -53,7 +53,7 @@ class Website < ApplicationRecord
       self.hsts_max_age = parse_hsts(@hsts)
       self.checked_at = current_time_from_proper_timezone
       
-      if self.is_https
+      if self.is_https && !@certificate.nil?
         self.certificate = @certificate.to_s
 
         self.not_before = @certificate.not_before
