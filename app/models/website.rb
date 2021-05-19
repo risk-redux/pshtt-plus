@@ -53,12 +53,14 @@ class Website < ApplicationRecord
       self.hsts_max_age = parse_hsts(@hsts)
       self.checked_at = current_time_from_proper_timezone
       
-      self.certificate = @certificate.to_s
+      if self.is_https
+        self.certificate = @certificate.to_s
 
-      self.not_before = @certificate.not_before
-      self.not_after = @certificate.not_after
-      self.issuer = @certificate.issuer.to_s
-      self.subject = @certificate.subject.to_s
+        self.not_before = @certificate.not_before
+        self.not_after = @certificate.not_after
+        self.issuer = @certificate.issuer.to_s
+        self.subject = @certificate.subject.to_s
+      end
 
       unless @http_status_code.nil?
         self.last_live_at = current_time_from_proper_timezone
@@ -131,21 +133,13 @@ class Website < ApplicationRecord
     report_card = Set.new
 
     if self.http_status_code < 400 && self.http_status_code >= 300
-      if self.is_www
-        if self.redirect_url.match("https://www." + self.domain.domain_name).nil?
-          report_card << { behaving: "warning", message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
-        else
-          report_card << { behaving: "success", message: "HTTP website appropriately redirects to an HTTPS location within the same domain!" }
-        end
+      if self.redirect_url.match("https://").nil?
+        report_card << { behaving: "warning", message: "HTTP websites should only ever redirect to HTTPS endpoints." }
       else
-        if self.redirect_url.match("https://" + self.domain.domain_name).nil?
-          report_card << { behaving: "warning", message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
-        else
-          report_card << { behaving: "success", message: "HTTP website appropriately redirects to an HTTPS location within the same domain!" }
-        end
+        report_card << { behaving: "success", message: "HTTP website appropriately redirects to an HTTPS endpoint." }
       end
     else
-      report_card << { behaving: "warning", message: "HTTP websites should only ever redirect to their HTTPS counterparts." }
+      report_card << { behaving: "warning", message: "HTTP websites should only ever redirect to HTTPS endpoints." }
     end
 
     return report_card
