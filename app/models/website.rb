@@ -125,8 +125,19 @@ class Website < ApplicationRecord
     
     report_card << grade_hsts
     report_card << grade_downgrade_redirections
+    report_card << grade_certificate_timing
     
     return report_card
+  end
+
+  def grade_certificate_timing
+    now = DateTime.now
+
+    if self.not_before < now && now < self.not_after
+      return { behaving: "success", message: "X.509 Certificate in valid date/time range!" }
+    else
+      return { behaving: "warning", message: "X.509 Certificate outside of valid date/time range." }
+    end
   end
 
   def grade_http
@@ -139,7 +150,7 @@ class Website < ApplicationRecord
         report_card << { behaving: "success", message: "HTTP website appropriately redirects to an HTTPS endpoint." }
       end
     else
-      report_card << { behaving: "warning", message: "HTTP websites should only ever redirect to HTTPS endpoints." }
+      report_card << { behaving: "warning", message: "HTTP websites shouldn't respond with anything other than redirects to HTTPS endpoints." }
     end
 
     return report_card
