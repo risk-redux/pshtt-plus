@@ -78,10 +78,11 @@ class Website < ApplicationRecord
 
       unless @http_status_code.nil?
         self.last_live_at = current_time_from_proper_timezone
-        self.report_card = grade_website
         
         unless @certificate_grade.nil?
-          self.report_card << @certificate_grade
+          self.report_card = Set[@certificate_grade]
+        else
+          self.report_card = grade_website
         end
 
         self.is_live = true
