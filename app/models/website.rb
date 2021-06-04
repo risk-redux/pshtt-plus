@@ -23,11 +23,18 @@ class Website < ApplicationRecord
     @digest
     @notes
     @certificate
+    @certificate_grade
 
     begin
       uri = URI(self.to_url)
 
-      Net::HTTP.start(uri.host, uri.port, { read_timeout: 5, open_timeout: 5, use_ssl: self.is_https }) do |http|
+      connection_params = {
+        read_timeout: 5,
+        open_timeout: 5,
+        use_ssl: self.is_https
+      }
+
+      Net::HTTP.start(uri.host, uri.port, connection_params) do |http|
         response = http.get(uri)
 
         @http_status_code = response.code
@@ -40,8 +47,15 @@ class Website < ApplicationRecord
           @certificate = OpenSSL::X509::Certificate.new(http.peer_cert.to_s)
         end
       end
+    rescue OpenSSL::SSL::SSLError => exception
+      @http_status_code = 0
+      @http_status = "#{exception.class}"
+      @notes = "[#{current_time_from_proper_timezone}, #{self.to_url}] Exception: #{exception.class} #{exception.message}"
+      @certificate_grade = { behaving: "warning", message: "Unverifiable X.509 certificate (#{exception.message})." }
+
+      puts @notes
     rescue => exception
-      @notes = "[#{current_time_from_proper_timezone}, #{self.to_url}] Exception: #{exception.message}"
+      @notes = "[#{current_time_from_proper_timezone}, #{self.to_url}] Exception: #{exception.class} #{exception.message}"
       puts @notes
     end
 
@@ -65,6 +79,11 @@ class Website < ApplicationRecord
       unless @http_status_code.nil?
         self.last_live_at = current_time_from_proper_timezone
         self.report_card = grade_website
+        
+        unless @certificate_grade.nil?
+          self.report_card << @certificate_grade
+        end
+
         self.is_live = true
       else
         if self.is_live || self.is_live.nil?
