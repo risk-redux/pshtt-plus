@@ -31,7 +31,9 @@ class Website < ApplicationRecord
       connection_params = {
         read_timeout: 5,
         open_timeout: 5,
-        use_ssl: self.is_https
+        use_ssl: self.is_https,
+        # An export of all Mozilla roots and intetmediaries. Ugh! I don't like it!
+        ca_file: "lib/assets/mozilla.root.ca.pem"
       }
 
       Net::HTTP.start(uri.host, uri.port, connection_params) do |http|
@@ -48,10 +50,8 @@ class Website < ApplicationRecord
         end
       end
     rescue OpenSSL::SSL::SSLError => exception
-      @http_status_code = 0
       @http_status = "#{exception.class}"
       @notes = "[#{current_time_from_proper_timezone}, #{self.to_url}] Exception: #{exception.class} #{exception.message}"
-      @certificate_grade = { behaving: "warning", message: "Unverifiable X.509 certificate (#{exception.message})." }
 
       puts @notes
     rescue => exception
@@ -76,7 +76,7 @@ class Website < ApplicationRecord
         self.subject = @certificate.subject.to_s
       end
 
-      unless @http_status_code.nil?
+      unless @http_status_code.nil? && @http_status.nil?
         self.last_live_at = current_time_from_proper_timezone
         self.report_card = grade_website
         
