@@ -1,8 +1,8 @@
 require 'sidekiq/web'
 
 Rails.application.routes.draw do
-  root to: "static#index"
-  get '/', to: "static#index", as: :welcome
+  root to: "domains#index"
+  get '/', to: "domains#index", as: :welcome
   get 'index', to: "static#index", as: :index
 
   get 'domains', to: "domains#index", as: :domains
