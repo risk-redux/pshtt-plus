@@ -10,7 +10,7 @@ class CheckDomainsJob < ApplicationJob
 
       @domain.check_websites
     rescue => exception
-      puts "Exception: #{exception}"
+      puts "Exception @ CheckDomainsJob: #{exception}"
     end
   end
 end
