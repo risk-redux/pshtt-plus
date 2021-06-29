@@ -1,10 +1,12 @@
 <%- view_title "Reports" %>
 
 <% content_for :main do %>
-  <h1>Reports <small class="text-muted">10 Most Current</small></h1>
+  <h1>Reports</h1>
 
+  <h2>Domains</h2>
+  
   <div class='table-responsive'>
-    <table id="report_table" class="table table-hover">
+    <table id="domains_report_table" class="table table-hover">
       <thead class="table-light">
         <tr>
           <th>Created at</th>
@@ -12,7 +14,32 @@
         </tr>
       </thead>
       <tbody>
-        <% @reports.each do |report| %>
+        <% @domains_reports.each do |report| %>
+        <tr>
+          <td>
+            <%= link_to(report_download_path(report.id)) do %>
+            <%= report.created_at %>
+            <% end %>
+          </td>
+          <td><%= number_to_human_size(report.content_blob.bytes.count) %></td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Redirects</h2>
+
+  <div class='table-responsive'>
+    <table id="redirects_report_table" class="table table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Created at</th>
+          <th>Size</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @redirects_reports.each do |report| %>
         <tr>
           <td>
             <%= link_to(report_download_path(report.id)) do %>
