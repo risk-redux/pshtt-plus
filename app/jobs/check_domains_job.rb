@@ -1,5 +1,5 @@
 class CheckDomainsJob < ApplicationJob
-  queue_as :default
+  queue_as :domain_checks
 
   def perform(domain_id)
     begin
