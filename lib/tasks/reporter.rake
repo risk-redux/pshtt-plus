@@ -4,7 +4,7 @@ namespace "reporter" do
     puts "Generating a domain report!"
 
     begin
-      headers = ["domain_name", "is_live", "live_websites", "is_behaving", "checked_at"]
+      headers = ["domain_name", "published", "live_websites", "is_behaving", "checked_at"]
 
       report = CSV.generate(headers: true) do |csv| 
         csv << headers 
