@@ -44,7 +44,7 @@ class Domain < ApplicationRecord
 
     begin
       Resolv::DNS.open() do |query|
-        query.timeouts = 1 # Quick resolution or bust!
+        query.timeouts = [1, 3, 5] # Try a couple of times.
         
         @a_record = parse_a_record(query)
         @aaaa_record = parse_aaaa_record(query)
@@ -68,6 +68,7 @@ class Domain < ApplicationRecord
 
       unless @a_record.empty? && @aaaa_record.empty? && @cname_record.empty?
         self.last_live_at = current_time_from_proper_timezone
+        self.notes.push("[#{current_time_from_proper_timezone}] Domain alive!")
         self.is_live = true
       else
         if self.is_live || self.is_live.nil?
