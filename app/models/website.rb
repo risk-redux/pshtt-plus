@@ -84,8 +84,10 @@ class Website < ApplicationRecord
           self.report_card << @certificate_grade
         end
 
-        self.notes.push("[#{current_time_from_proper_timezone}] Website alive!")
-        self.is_live = true
+        if !self.is_live || self.is_live.nil?
+          self.notes.push("[#{current_time_from_proper_timezone}] Website alive!")
+          self.is_live = true
+        end
       else
         if self.is_live || self.is_live.nil?
           self.notes.push("[#{current_time_from_proper_timezone}] Website died!")
