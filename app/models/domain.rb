@@ -68,7 +68,7 @@ class Domain < ApplicationRecord
 
       unless @a_record.empty? && @aaaa_record.empty? && @cname_record.empty?
         self.last_live_at = current_time_from_proper_timezone
-        if !self.is_live && !self.is_live.nil?
+        if !self.is_live || self.is_live.nil?
           self.notes.push("[#{current_time_from_proper_timezone}] Domain alive!")
           self.is_live = true
         end
