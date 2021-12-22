@@ -5,6 +5,14 @@ Rails.application.routes.draw do
   get '/', to: "domains#index", as: :welcome
   get 'index', to: "static#index", as: :index
 
+  # Only allow authenticated users to access the domain loader.
+  devise_scope :user do
+    authenticated :user do
+      get 'domains/load', to: "domains#load", as: :domains_loader
+      post 'domains/load', to: "domains#load", as: :load_domains
+    end
+  end
+  
   get 'domains', to: "domains#index", as: :domains
   post 'domains', to: "domains#queue", as: :domain_queue
   get 'domains/:id', to: "domains#view", as: :domain

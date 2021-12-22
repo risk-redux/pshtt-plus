@@ -24,7 +24,32 @@ class DomainsController < ApplicationController
     end
   end
 
+  def load
+    if request.get?
+      # Just load the view.
+    elsif request.post?
+      if params[:file]
+        @queued_targets = parse_file params[:file]
+      end
+    end
+  end
+
   private
+
+  def parse_file(file)
+    targets = File.open file
+    queued_targets = []
+
+    targets.readlines.each do |target|
+      d = Domain.find_or_create_by(domain_name: target.chomp)
+
+      CheckDomainsJob.perform_later d.id
+
+      queued_targets.push d
+    end
+
+    return queued_targets
+  end
 
   def domain_queue_params
     # Todo: Strong parameter validation.

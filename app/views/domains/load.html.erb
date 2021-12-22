@@ -1,0 +1,26 @@
+<%- view_title "Domains Load" %>
+
+<% content_for :main do %>
+  <h1>Domains Loader</h1>
+
+  <%= form_with url: load_domains_path(), method: :post do |form| %>
+    <div class="mb-3">
+      <%= form.label :file, "TXT File", { class: "form-label" } %>
+      <%= form.file_field :file, { class: "form-control" } %>
+    </div>
+    <div class="mb-3">
+      <%= form.submit "Load", { class: "btn btn-primary" } %>
+    </div>
+  <% end %>
+
+  <% unless @queued_targets.nil? %>
+  <div class="alert alert-info" role="alert">
+    <h2>Loaded the following domains:</h2>
+    <ul>
+      <% @queued_targets.each do |target| %>
+        <li><%= target.domain_name %></li>
+      <% end %>
+    </ul>
+  </div>
+  <% end %>
+<% end %>
